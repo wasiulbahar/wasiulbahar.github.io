@@ -55,6 +55,14 @@
 
   document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
+  // Arriving on a #section link: land on it again once the fonts have settled the layout.
+  if (location.hash && document.fonts) {
+    document.fonts.ready.then(function () {
+      var target = document.getElementById(location.hash.slice(1));
+      if (target) target.scrollIntoView({ behavior: "instant", block: "start" });
+    });
+  }
+
   // Play loops only while on screen.
   document.querySelectorAll("video[data-loop]").forEach(function (v) {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); return; }
