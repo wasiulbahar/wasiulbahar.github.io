@@ -195,26 +195,33 @@
     spy();
   }
 
-  // On this day: swap in the photo for the visitor's own date (or the nearest date that has one).
+  // On this day: the photo for the visitor's own date (or the nearest date that has one);
+  // "Another photo" steps outward to the next nearest dates.
   var otd = document.querySelector("[data-otd]");
   if (otd && window.fetch) {
     fetch("data/on-this-day.json").then(function (r) { return r.json(); }).then(function (all) {
-      var now = new Date(), year = function (k) { return new Date(2024, +k.slice(0, 2) - 1, +k.slice(3)); };
-      var todayKey = ("0" + (now.getMonth() + 1)).slice(-2) + "-" + ("0" + now.getDate()).slice(-2);
-      var t = year(todayKey), best = null, gap = 1e9;
-      Object.keys(all).forEach(function (k) {
-        var d = Math.abs(year(k) - t) / 864e5; d = Math.min(d, 366 - d); // dates wrap round the year
-        if (d < gap) { gap = d; best = k; }
-      });
-      if (!best) return;
-      var e = all[best], when = new Date(e.date + "T12:00:00");
-      otd.querySelector("[data-otd-chip]").textContent = best === todayKey ? "On this day" : "Around this day";
-      otd.querySelector("[data-otd-date]").textContent = when.getDate() + " " + when.toLocaleString("en-GB", { month: "long" }) + " " + when.getFullYear();
-      otd.querySelector("[data-otd-title]").textContent = e.title;
-      var img = otd.querySelector("img");
-      img.src = e.thumb; img.alt = e.title;
-      otd.querySelector(".otd-img").href = e.page;
-      otd.querySelector("[data-otd-page]").href = e.page;
+      var now = new Date(), asDate = function (k) { return new Date(2024, +k.slice(0, 2) - 1, +k.slice(3)); };
+      var todayKey = ("0" + (now.getMonth() + 1)).slice(-2) + "-" + ("0" + now.getDate()).slice(-2), t = asDate(todayKey);
+      var gap = function (k) { var d = Math.abs(asDate(k) - t) / 864e5; return Math.min(d, 366 - d); }; // dates wrap round the year
+      var order = Object.keys(all).sort(function (a, b) { return gap(a) - gap(b); });
+      if (!order.length) return;
+      var img = otd.querySelector("img"), i = 0;
+      var show = function () {
+        var k = order[i], e = all[k], when = new Date(e.date + "T12:00:00");
+        otd.querySelector("[data-otd-chip]").textContent = k === todayKey ? "On this day" : "Around this day";
+        otd.querySelector("[data-otd-date]").textContent = when.getDate() + " " + when.toLocaleString("en-GB", { month: "long" }) + " " + when.getFullYear();
+        otd.querySelector("[data-otd-title]").textContent = e.title;
+        otd.querySelector(".otd-img").href = e.page;
+        otd.querySelector("[data-otd-page]").href = e.page;
+        img.classList.add("fade");
+        var pre = new Image(), want = i;
+        pre.onload = pre.onerror = function () { if (want !== i) return; img.src = e.thumb; img.alt = e.title; img.classList.remove("fade"); };
+        pre.src = e.thumb;
+      };
+      show();
+      var next = document.getElementById("otd-next");
+      next.hidden = order.length < 2;
+      next.addEventListener("click", function () { i = (i + 1) % order.length; show(); });
     }).catch(function () {});
   }
 
