@@ -161,6 +161,22 @@
     });
   }
 
+  // CV page: light up the menu item of the section being read.
+  var tocLinks = document.querySelectorAll(".cv-toc a");
+  if (tocLinks.length) {
+    var blocks = Array.prototype.slice.call(document.querySelectorAll(".cv-block"));
+    var spy = function () {
+      // the last section whose top has passed a line a third of the way down the screen
+      var id = blocks[0].id;
+      blocks.forEach(function (b) { if (b.getBoundingClientRect().top < innerHeight / 3) id = b.id; });
+      if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) id = blocks[blocks.length - 1].id;
+      tocLinks.forEach(function (a) { a.setAttribute("aria-current", a.getAttribute("href") === "#" + id ? "true" : "false"); });
+    };
+    addEventListener("scroll", spy, { passive: true });
+    addEventListener("resize", spy);
+    spy();
+  }
+
   // Writing page: show one kind of story; a year heading hides when none of its stories are left.
   var kindBtns = document.querySelectorAll(".filters button");
   kindBtns.forEach(function (btn) {
