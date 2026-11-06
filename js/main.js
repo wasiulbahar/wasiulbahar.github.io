@@ -20,6 +20,29 @@
     });
   }
 
+  // Analytics (PostHog, see ph.js): which sections people reach, and a few named clicks.
+  var track = function (name, props) { if (window.posthog && posthog.capture) posthog.capture(name, props || {}); };
+  if ("IntersectionObserver" in window) {
+    var seen = {};
+    var sectionSpy = new IntersectionObserver(function (en) {
+      en.forEach(function (e) {
+        var id = e.target.id;
+        if (!e.isIntersecting || seen[id]) return;
+        seen[id] = true;
+        var h = e.target.querySelector("h1, h2");
+        track("section_viewed", { section: id, title: h ? h.textContent.trim() : id, page: location.pathname });
+      });
+    }, { threshold: 0.35 });
+    document.querySelectorAll("main section[id], section.contact").forEach(function (s) { sectionSpy.observe(s); });
+  }
+  document.addEventListener("click", function (e) {
+    var el = e.target.closest && e.target.closest("#dyk-next, #otd-next, .search-btn, .arch, a[href^='mailto:'], .jt");
+    if (!el) return;
+    var name = el.id === "dyk-next" ? "fact_next" : el.id === "otd-next" ? "photo_next" : el.classList.contains("search-btn") ? "search_open"
+      : el.classList.contains("arch") ? "press_archive_open" : el.classList.contains("jt") ? "gallery_photo_open" : "email_click";
+    track(name, { page: location.pathname });
+  });
+
   // Theme toggle: remembered per visitor, falls back to the OS setting.
   document.querySelectorAll(".theme-btn").forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -254,6 +277,7 @@
     var run = function () {
       var words = sQ.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
       if (!words.length) { hits = []; draw(); return; }
+      clearTimeout(run.t); run.t = setTimeout(function () { track("site_search", { query: sQ.value.trim().slice(0, 80) }); }, 1200);
       load().then(function (idx) {
         hits = idx.map(function (it) {
           var t = it.t.toLowerCase(), all = (t + " " + it.s + " " + (it.k || "")).toLowerCase();
