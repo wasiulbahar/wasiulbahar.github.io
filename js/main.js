@@ -195,6 +195,91 @@
     spy();
   }
 
+  // On this day: swap in the photo for the visitor's own date (or the nearest date that has one).
+  var otd = document.querySelector("[data-otd]");
+  if (otd && window.fetch) {
+    fetch("data/on-this-day.json").then(function (r) { return r.json(); }).then(function (all) {
+      var now = new Date(), year = function (k) { return new Date(2024, +k.slice(0, 2) - 1, +k.slice(3)); };
+      var todayKey = ("0" + (now.getMonth() + 1)).slice(-2) + "-" + ("0" + now.getDate()).slice(-2);
+      var t = year(todayKey), best = null, gap = 1e9;
+      Object.keys(all).forEach(function (k) {
+        var d = Math.abs(year(k) - t) / 864e5; d = Math.min(d, 366 - d); // dates wrap round the year
+        if (d < gap) { gap = d; best = k; }
+      });
+      if (!best) return;
+      var e = all[best], when = new Date(e.date + "T12:00:00");
+      otd.querySelector("[data-otd-chip]").textContent = best === todayKey ? "On this day" : "Around this day";
+      otd.querySelector("[data-otd-date]").textContent = when.getDate() + " " + when.toLocaleString("en-GB", { month: "long" }) + " " + when.getFullYear();
+      otd.querySelector("[data-otd-title]").textContent = e.title;
+      var img = otd.querySelector("img");
+      img.src = e.thumb; img.alt = e.title;
+      otd.querySelector(".otd-img").href = e.page;
+      otd.querySelector("[data-otd-page]").href = e.page;
+    }).catch(function () {});
+  }
+
+  // Did you know? cycles through the facts.
+  var dykBtn = document.getElementById("dyk-next");
+  if (dykBtn) {
+    var facts = Array.prototype.slice.call(document.querySelectorAll(".dyk-list li")), fi = 0;
+    dykBtn.addEventListener("click", function () {
+      facts[fi].hidden = true;
+      fi = (fi + 1) % facts.length;
+      facts[fi].hidden = false;
+      document.getElementById("dyk-n").textContent = (fi + 1) + " / " + facts.length;
+    });
+  }
+
+  // Site search: the search icon or Ctrl+K opens it; results as you type.
+  var sBox = document.getElementById("search"), sQ = document.getElementById("search-q"), sR = document.getElementById("search-r");
+  if (sBox) {
+    var index = null, hits = [], sel = 0, sOpener = null;
+    var load = function () {
+      if (index) return Promise.resolve(index);
+      return fetch("data/search.json").then(function (r) { return r.json(); }).then(function (d) { return (index = d); });
+    };
+    var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var draw = function () {
+      sR.innerHTML = hits.length ? hits.map(function (h, i) {
+        return '<li role="option" aria-selected="' + (i === sel) + '"><a href="' + esc(h.u) + '"><b>' + esc(h.t) + "</b><span>" + esc(h.s) + "</span></a></li>";
+      }).join("") : (sQ.value.trim() ? '<li class="none">Nothing found. Try another word.</li>' : "");
+    };
+    var run = function () {
+      var words = sQ.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      if (!words.length) { hits = []; draw(); return; }
+      load().then(function (idx) {
+        hits = idx.map(function (it) {
+          var t = it.t.toLowerCase(), all = (t + " " + it.s + " " + (it.k || "")).toLowerCase();
+          if (!words.every(function (w) { return all.indexOf(w) >= 0; })) return null;
+          var score = words.reduce(function (n, w) { return n + (t.indexOf(w) === 0 ? 3 : t.indexOf(w) >= 0 ? 2 : 0); }, 0);
+          return { it: it, score: score };
+        }).filter(Boolean).sort(function (a, b) { return b.score - a.score; }).slice(0, 8).map(function (x) { return x.it; });
+        sel = 0; draw();
+      });
+    };
+    var openSearch = function () {
+      sOpener = document.activeElement;
+      sBox.hidden = false; document.body.style.overflow = "hidden";
+      sQ.focus(); sQ.select(); load();
+    };
+    var closeSearch = function () {
+      sBox.hidden = true; document.body.style.overflow = "";
+      if (sOpener) sOpener.focus();
+    };
+    document.querySelectorAll(".search-btn").forEach(function (b) { b.addEventListener("click", openSearch); });
+    sQ.addEventListener("input", run);
+    sBox.addEventListener("click", function (e) { if (e.target === sBox) closeSearch(); });
+    document.addEventListener("keydown", function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); sBox.hidden ? openSearch() : closeSearch(); return; }
+      if (sBox.hidden) return;
+      if (e.key === "Escape") closeSearch();
+      else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        if (hits.length) { sel = (sel + (e.key === "ArrowDown" ? 1 : -1) + hits.length) % hits.length; draw(); }
+      } else if (e.key === "Enter" && hits[sel]) { e.preventDefault(); location.href = hits[sel].u; }
+    });
+  }
+
   // Writing page: show one kind of story; a year heading hides when none of its stories are left.
   var kindBtns = document.querySelectorAll(".filters button");
   kindBtns.forEach(function (btn) {

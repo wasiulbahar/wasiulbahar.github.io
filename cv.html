@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=abd6b6c3">
+<link rel="stylesheet" href="css/style.css?v=827a7467">
 <script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 </head>
 <body class="">
@@ -25,8 +25,9 @@
 <header class="nav">
   <div class="wrap nav-in">
     <a class="brand" href="./"><img src="favicon.svg" alt="" width="40" height="40"><span class="brand-t"><b>Wasiul Bahar</b><span>Journalist · Photographer · Open knowledge advocate</span></span></a>
-    <nav class="nav-links" aria-label="Main"><a href="./#jobs">Work</a><a href="writing.html">Writing</a><a href="./#open">Open knowledge</a><a href="journey.html">Journey</a><a href="press.html">Press</a><a href="gallery.html">Gallery</a><a href="tools.html">Tools</a><a href="cv.html" aria-current="page">CV</a></nav>
+    <nav class="nav-links" aria-label="Main"><a href="./#jobs">Work</a><a href="writing.html">Writing</a><a href="journey.html">Journey</a><a href="press.html">Press</a><a href="gallery.html">Gallery</a><a href="darkroom.html">Darkroom</a><a href="tools.html">Tools</a><a href="cv.html" aria-current="page">CV</a></nav>
     <div class="nav-end">
+      <button class="icon-btn search-btn" type="button" aria-label="Search the site (Ctrl+K)" aria-keyshortcuts="Control+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
       <button class="icon-btn theme-btn" aria-label="Switch light or dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
       <a class="btn small" href="mailto:wasiulbahar@gmail.com">Email</a>
       <button class="icon-btn menu-btn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
@@ -145,6 +146,13 @@
     <div class="foot-row"><span>© <span data-year>2026</span> Wasiul Bahar, Dhaka</span><span>All photographs on this site are my own.</span></div>
   </div>
 </footer>
-<script src="js/main.js?v=029a95de"></script>
+<div class="search" id="search" role="dialog" aria-modal="true" aria-label="Search the site" hidden>
+  <div class="search-box card">
+    <input type="search" id="search-q" placeholder="Search stories, press, CV, photos…" autocomplete="off" aria-label="Search" aria-controls="search-r">
+    <ol id="search-r" class="search-r" role="listbox" aria-label="Results"></ol>
+    <p class="search-hint">↑ ↓ to move · Enter to open · Esc to close</p>
+  </div>
+</div>
+<script src="js/main.js?v=3bf742d2"></script>
 </body>
 </html>
