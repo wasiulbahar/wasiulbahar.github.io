@@ -113,12 +113,12 @@ a.card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--shad
 .brand b { font-size: 1.25rem; letter-spacing: -0.02em; }
 .brand-t span { font-size: .8125rem; color: var(--ink-2); }
 .nav-links { display: flex; gap: 2px; padding: 4px; border: var(--bw) solid var(--line); border-radius: 999px; background: var(--card); }
-.nav-links a { text-decoration: none; font-size: .95rem; font-weight: 600; padding: 7px 14px; border-radius: 999px; transition: background-color .2s, color .2s; }
+.nav-links a { white-space: nowrap; text-decoration: none; font-size: .95rem; font-weight: 600; padding: 7px 14px; border-radius: 999px; transition: background-color .2s, color .2s; }
 .nav-links a:hover { background: var(--paper-2); }
 .nav-links a[aria-current="page"] { background: var(--green); color: var(--on-green); }
 .nav-end { display: flex; gap: 10px; align-items: center; }
 .menu-btn { display: none; }
-@media (max-width: 1180px) {
+@media (max-width: 1360px) {
   .menu-btn { display: grid; }
   .nav-links { position: absolute; top: 70px; left: 0; right: 0; flex-direction: column; border-radius: 0; border-width: 0 0 var(--bw); padding: 8px var(--gutter) 20px; display: none; background: var(--paper); }
   .nav-links.open { display: flex; }
