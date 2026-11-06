@@ -2,6 +2,24 @@
   var root = document.documentElement;
   var still = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Camera cursor: each mouse click closes the shutter for a moment and sends out a flash ring.
+  if (matchMedia("(pointer: fine)").matches) {
+    var snapTimer = null;
+    addEventListener("pointerdown", function (e) {
+      if (e.pointerType !== "mouse" || (e.target.closest && e.target.closest("input:not([type=range]), textarea"))) return;
+      root.classList.add("snap");
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(function () { root.classList.remove("snap"); }, 160);
+      if (still) return;
+      var ring = document.createElement("span");
+      ring.className = "flash-ring";
+      ring.style.left = e.clientX + "px";
+      ring.style.top = e.clientY + "px";
+      document.body.appendChild(ring);
+      setTimeout(function () { ring.remove(); }, 500);
+    });
+  }
+
   // Theme toggle: remembered per visitor, falls back to the OS setting.
   document.querySelectorAll(".theme-btn").forEach(function (btn) {
     btn.addEventListener("click", function () {
