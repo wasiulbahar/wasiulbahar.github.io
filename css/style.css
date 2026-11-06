@@ -302,12 +302,16 @@ a.card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--shad
 /* press cards: four on home, all on press.html */
 .press-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .press-cards.wide { grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.press-card { display: flex; flex-direction: column; overflow: hidden; }
+.press-card { display: flex; flex-direction: column; overflow: hidden; transition: transform .2s var(--ease), box-shadow .2s var(--ease); }
+.press-card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--shade); }
+.press-main { display: flex; flex-direction: column; flex: 1; text-decoration: none; }
+.arch { align-self: flex-start; margin: 0 16px 16px; display: inline-flex; align-items: center; gap: 4px; font-size: var(--small); font-weight: 700; padding: 4px 11px; border: 2px solid var(--line); border-radius: 999px; text-decoration: none; transition: background-color .2s, color .2s; }
+.arch:hover { background: var(--yellow); color: #141714; border-color: #000; }
 .press-card img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border-bottom: var(--bw) solid var(--line); background: #fff; }
-.press-card > div { padding: 14px 16px 16px; display: grid; gap: 4px; }
+.press-main > div { padding: 14px 16px 16px; display: grid; gap: 4px; }
 .press-card b { font-weight: 700; font-size: 1.125rem; transition: color .2s; }
 .press-card span { color: var(--ink-2); font-size: .95rem; line-height: 1.4; }
-.press-card:hover b { color: var(--green); }
+.press-main:hover b { color: var(--green); }
 @media (max-width: 960px) { .press-cards.wide { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .press-cards, .press-cards.wide { grid-template-columns: 1fr; } }
 @media (max-width: 960px) { .awards-grid { grid-template-columns: 1fr; } }
