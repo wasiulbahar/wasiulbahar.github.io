@@ -333,7 +333,7 @@ a.card:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--shad
 
 /* tools */
 .tools { display: grid; gap: clamp(72px, 9vw, 128px); }
-.tool-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.tool-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
 .tool-card { display: flex; gap: 18px; align-items: flex-start; padding: 22px; }
 .tool-card img { width: 56px; height: 56px; flex: none; }
 .tool-card h3 { font-size: var(--h3); transition: color .2s; }

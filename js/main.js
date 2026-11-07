@@ -218,20 +218,34 @@
     spy();
   }
 
-  // On this day: the photo for the visitor's own date (or the nearest date that has one);
-  // "Another photo" steps outward to the next nearest dates.
+  // On this day: a photo from the visitor's own date; if none, one from this month that changes every day;
+  // else the nearest date. "Another photo" then walks through this month's photos and on to nearby dates.
   var otd = document.querySelector("[data-otd]");
   if (otd && window.fetch) {
     fetch("data/on-this-day.json").then(function (r) { return r.json(); }).then(function (all) {
       var now = new Date(), asDate = function (k) { return new Date(2024, +k.slice(0, 2) - 1, +k.slice(3)); };
-      var todayKey = ("0" + (now.getMonth() + 1)).slice(-2) + "-" + ("0" + now.getDate()).slice(-2), t = asDate(todayKey);
+      var pad = function (n) { return ("0" + n).slice(-2); };
+      var todayKey = pad(now.getMonth() + 1) + "-" + pad(now.getDate()), month = todayKey.slice(0, 2), t = asDate(todayKey);
       var gap = function (k) { var d = Math.abs(asDate(k) - t) / 864e5; return Math.min(d, 366 - d); }; // dates wrap round the year
-      var order = Object.keys(all).sort(function (a, b) { return gap(a) - gap(b); });
-      if (!order.length) return;
+      var list = function (k) { return [].concat(all[k]).map(function (e) { return { k: k, e: e }; }); };
+      var rotate = function (a, n) { n = n % a.length; return a.slice(n).concat(a.slice(0, n)); };
+      var keys = Object.keys(all);
+      if (!keys.length) return;
+      var head = [], label;
+      if (all[todayKey]) { head = rotate(list(todayKey), now.getFullYear()); label = "On this day"; }
+      else {
+        keys.filter(function (k) { return k.slice(0, 2) === month; }).sort().forEach(function (k) { head = head.concat(list(k)); });
+        if (head.length) { head = rotate(head, now.getDate()); label = "This month in my archive"; }
+      }
+      var rest = [];
+      keys.sort(function (a, b) { return gap(a) - gap(b); }).forEach(function (k) {
+        if (k !== todayKey && !(label === "This month in my archive" && k.slice(0, 2) === month)) rest = rest.concat(list(k));
+      });
+      var order = head.concat(rest);
       var img = otd.querySelector("img"), i = 0;
       var show = function () {
-        var k = order[i], e = all[k], when = new Date(e.date + "T12:00:00");
-        otd.querySelector("[data-otd-chip]").textContent = k === todayKey ? "On this day" : "Around this day";
+        var k = order[i].k, e = order[i].e, when = new Date(e.date + "T12:00:00");
+        otd.querySelector("[data-otd-chip]").textContent = i < head.length ? label : "Around this day";
         otd.querySelector("[data-otd-date]").textContent = when.getDate() + " " + when.toLocaleString("en-GB", { month: "long" }) + " " + when.getFullYear();
         otd.querySelector("[data-otd-title]").textContent = e.title;
         otd.querySelector(".otd-img").href = e.page;
