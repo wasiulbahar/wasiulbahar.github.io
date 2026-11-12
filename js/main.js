@@ -413,3 +413,20 @@
   var start = parseInt(location.hash.slice(1), 10);
   if (start >= 1 && start <= tiles.length) open(start - 1);
 })();
+
+// Journey award photos: tap (or Enter/Space) a row with a photo to flash it out as a polaroid.
+(function () {
+  function toggle(li) {
+    var on = li.classList.toggle("on");
+    li.setAttribute("aria-expanded", on ? "true" : "false");
+    if (on && window.posthog && posthog.capture) posthog.capture("award_photo_open", { award: li.querySelector("b").textContent.trim() });
+  }
+  document.addEventListener("click", function (e) {
+    var li = e.target.closest(".has-pic");
+    if (li && !e.target.closest("a")) toggle(li);
+  });
+  document.addEventListener("keydown", function (e) {
+    var li = e.target.closest && e.target.closest(".has-pic");
+    if (li && e.target === li && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); toggle(li); }
+  });
+})();
