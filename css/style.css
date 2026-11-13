@@ -53,7 +53,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 400 var(--body)/1.55 var(--font); font-optical-sizing: auto; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-img, video { max-width: 100%; display: block; }
+img, video { max-width: 100%; height: auto; display: block; }
 a { color: inherit; }
 h1, h2, h3, p, figure, ul, ol { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
@@ -646,3 +646,17 @@ body.dark-page { background: var(--dark); color: var(--on-dark); }
 .pol img { display: block; width: 100%; height: auto; background: #ddd; }
 .pol figcaption { font-family: "Caveat", "Segoe Print", cursive; color: #141714; font-size: 1.05rem; text-align: center; padding: 8px 0 6px; }
 @media (prefers-reduced-motion: reduce) { .pol { transition: opacity .2s; transform: rotate(-3deg); } .has-pic.on::after { animation: none; } }
+
+/* long buttons wrap on narrow screens instead of pushing the page sideways */
+.btn { max-width: 100%; }
+@media (max-width: 560px) { .g-intro .btn, .nf-links .btn { white-space: normal; padding: 12px 20px; line-height: 1.25; text-align: left; } }
+.nf-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+
+/* back to top */
+.to-top { position: fixed; right: 18px; bottom: 18px; z-index: 90; width: 52px; height: 52px; display: grid; place-items: center; padding: 0;
+  background: var(--yellow); color: #141714; border: var(--bw) solid #000; border-radius: 12px; box-shadow: 4px 4px 0 #000; cursor: pointer;
+  transition: transform .18s var(--ease), box-shadow .18s var(--ease), opacity .2s; }
+.to-top[hidden] { display: none; }
+.to-top svg { width: 22px; height: 22px; transform: rotate(-90deg); }
+.to-top:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #000; }
+@media print { .to-top { display: none; } }

@@ -430,3 +430,16 @@
     if (li && e.target === li && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); toggle(li); }
   });
 })();
+
+// Back to top: shows after two screens of scrolling.
+(function () {
+  var b = document.getElementById("to-top");
+  if (!b) return;
+  var show = function () { b.hidden = window.scrollY < window.innerHeight * 2; };
+  window.addEventListener("scroll", show, { passive: true });
+  show();
+  b.addEventListener("click", function () {
+    var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: calm ? "auto" : "smooth" });
+  });
+})();
