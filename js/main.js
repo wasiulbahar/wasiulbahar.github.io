@@ -232,7 +232,7 @@
       var keys = Object.keys(all);
       if (!keys.length) return;
       var head = [], label;
-      if (all[todayKey]) { head = rotate(list(todayKey), now.getFullYear()); label = "On this day"; }
+      if (all[todayKey]) { head = list(todayKey); if (!head[0].e.pin) head = rotate(head, now.getFullYear()); label = "On this day"; }
       else {
         keys.filter(function (k) { return k.slice(0, 2) === month; }).sort().forEach(function (k) { head = head.concat(list(k)); });
         if (head.length) { head = rotate(head, now.getDate()); label = "This month in my archive"; }
