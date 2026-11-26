@@ -54,7 +54,7 @@ strong { color: var(--ink); }
   .ls-scrolly { grid-template-columns: 1fr; }
   .ls-scrolly-fig { top: 54px; height: 50vh; z-index: 1; }
   .ls-scrolly-steps { padding: 4vh 0 30vh; position: relative; z-index: 2; }
-  .ls-step { min-height: 70vh; align-content: end; }
+  .ls-step { min-height: 100vh; align-content: end; }   /* more clear time on the X-ray between cards */
   .ls-step > * { background: rgba(11, 6, 6, .94); padding: .5rem .4rem; }
 }
 

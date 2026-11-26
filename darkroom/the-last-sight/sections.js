@@ -140,9 +140,10 @@
   // ---------------------------------------------------------------- 4. pellets in flight
   var cv = document.getElementById("shot");
   if (cv) {
+    if (cv.clientWidth && cv.clientWidth < 600) cv.width = 640;   // phones: gun and head closer (it is marked not to scale), so the picture is taller
     var cx = cv.getContext("2d"), W = cv.width, H = cv.height;
     var dist = document.getElementById("dist"), dout = document.getElementById("dist-out"), read = document.getElementById("shot-read");
-    var MUZ = { x: 150, y: 230 }, TX = 1010, TY = 228, FACE = { rx: 62, ry: 80 }, PXCM = 124 / 15;
+    var MUZ = { x: 150, y: 230 }, TX = W - 190, TY = 228, FACE = { rx: 62, ry: 80 }, PXCM = 124 / 15;
     var pellets = [], hits = [], t0 = 0, running = false, rnd = Math.random;
     var gauss = function () { var u = 0, v = 0; while (!u) u = rnd(); while (!v) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
     var scene = function (flash) {
