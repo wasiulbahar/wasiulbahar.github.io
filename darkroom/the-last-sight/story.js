@@ -272,6 +272,7 @@
         var was = ch.dataset.state;
         ch.dataset.state = k;
         M("scene", "ch-" + k);
+        if (window.LS.onStep) window.LS.onStep(p, ch, k, was);   // interact.js: things tied to one person and one step
         if (k === "moment" && was !== "moment" && !calm) { ch.classList.remove("impact"); void ch.offsetWidth; ch.classList.add("impact"); }
         if (listen && (k === "quote" || k === "after" || k === "now")) { var b = e.target.querySelector(".ls-play"); if (b) b.click(); }
       });

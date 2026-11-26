@@ -9,7 +9,7 @@
 
   var ctx = null, master, duckG, buffers = {}, layers = {}, loading = null;
   var enabled = false, musicOn = true, current = "silent";
-  var LOOPS = ["street", "crowd", "heli", "heart", "ward", "rain"], ONCE = ["shot", "ring"];
+  var LOOPS = ["street", "crowd", "heli", "heart", "ward", "rain"], ONCE = ["shot", "ring", "azan"];
   // each scene: target level for each loop, plus one-shots to fire on entry
   var SCENES = {
     silent: {},
@@ -78,6 +78,7 @@
     // called with the reader's choice; a click is what allows audio to start
     enable: function (yes) { enabled = yes; if (yes) init().then(refresh); else refresh(); },
     scene: function (name) { if (name === current) return; current = name; if (on()) apply(name); },
+    play: function (name, level) { if (on() && ctx) fire(name, level || .5); },   // a one-off on cue, e.g. the azan for Pulok
     duck: function (down) { if (ctx) ramp(duckG.gain, down ? .15 : 1, down ? .4 : 1.6); },
     state: function () {   // for checking the mix by hand
       if (!ctx) return { started: false };
