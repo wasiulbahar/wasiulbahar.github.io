@@ -1,27 +1,30 @@
-/* The score, mixed live with Web Audio. Silent until the reader asks for sound; always steps aside for a survivor's voice.
-   Layers (media/score/): drone, tension, heart and now loop or play under gains; thud and ring are one-shots. */
+/* The sound, mixed live with Web Audio from real recordings (credits in the method section). Silent until the reader asks
+   for sound; always steps aside for a survivor's voice.
+   Loops (media/score/): street, crowd, heli, heart, ward and rain run under gains; shot and ring are one-shots.
+   There is no music under the story. */
 (function () {
   "use strict";
   var LS = window.LS, AC = window.AudioContext || window.webkitAudioContext;
   if (!AC) { LS.music = { scene: function () {}, duck: function () {}, enable: function () {} }; return; }
 
   var ctx = null, master, duckG, buffers = {}, layers = {}, loading = null;
-  var enabled = false, musicOn = true, current = "silent", nowSource = null;
-  var LOOPS = ["drone", "tension", "heart"], ONCE = ["thud", "ring", "now"];
+  var enabled = false, musicOn = true, current = "silent";
+  var LOOPS = ["street", "crowd", "heli", "heart", "ward", "rain"], ONCE = ["shot", "ring"];
   // each scene: target level for each loop, plus one-shots to fire on entry
   var SCENES = {
     silent: {},
-    "open-1": { drone: .3 }, "open-2": { drone: .3, tension: .2 }, "open-3": { drone: .25, tension: .38 },
-    "open-4": { fire: [["ring", .22]] },
-    calm: { drone: .3 },
-    data: { drone: .16 },
-    "ch-intro": { drone: .32 },
-    "ch-where": { drone: .16, tension: .42 },
-    "ch-moment": { fire: [["thud", .9], ["ring", .2]] },
+    "open-1": { street: .5 }, "open-2": { street: .35, crowd: .45 }, "open-3": { crowd: .6, heli: .3, street: .15 },
+    "open-4": { fire: [["shot", 1], ["ring", .35]] },
+    calm: { rain: .1 },
+    data: {},
+    map: { heli: .3 },
+    "ch-intro": { street: .3 },
+    "ch-where": { crowd: .5, heli: .18, street: .15 },
+    "ch-moment": { fire: [["shot", 1], ["ring", .3]] },
     "ch-quote": {},
-    "ch-after": { heart: .5, drone: .08 },
-    "ch-now": { drone: .3, fire: [["now", .42]] },
-    ending: { drone: .26, fire: [["now", .4]] }
+    "ch-after": { heart: .45, ward: .3 },
+    "ch-now": { rain: .3 },
+    ending: { rain: .25 }
   };
 
   function init() {
@@ -51,21 +54,18 @@
     param.cancelScheduledValues(t); param.setValueAtTime(param.value, t);
     param.linearRampToValueAtTime(value, t + secs);
   }
-  function fire(name, level) {
+  function fire(name, level, delay) {
     if (!buffers[name]) return;
-    if (name === "now" && nowSource) { try { nowSource.stop(); } catch (e) {} }
     var src = ctx.createBufferSource(), g = ctx.createGain();
     src.buffer = buffers[name]; g.gain.value = level;
-    src.connect(g); g.connect(master); src.start();
-    if (name === "now") nowSource = src;
+    src.connect(g); g.connect(master); src.start(ctx.currentTime + (delay || 0));
   }
   function apply(name, quiet) {
     if (!ctx || !Object.keys(layers).length) return;
     var s = SCENES[name] || {};
     var sudden = name === "ch-moment" || name === "open-4";   // the moment: everything stops at once
     LOOPS.forEach(function (l) { if (layers[l]) ramp(layers[l].gain, s[l] || 0, sudden ? .12 : 2.5); });
-    if (!quiet && s.fire) s.fire.forEach(function (f) { fire(f[0], f[1]); });
-    if (name !== "ch-now" && name !== "ending" && nowSource) { try { nowSource.stop(ctx.currentTime + 2); } catch (e) {} nowSource = null; }
+    if (!quiet && s.fire) s.fire.forEach(function (f) { fire(f[0], f[1], f[2]); });
   }
   function on() { return enabled && musicOn; }
   function refresh() {
@@ -95,8 +95,8 @@
   });
 
   // the sections outside the chapters each set a scene as they reach the middle of the screen
-  var map = [["ls-gate", "silent"], ["story", null], ["ls-six", "calm"], ["ls-body", "data"], ["ls-range", "data"], ["ls-count", "data"],
-             ["ls-buy", "data"], ["ls-where", "data"], ["ls-after", "calm"], ["ls-method", "silent"]];
+  var map = [["ls-gate", "silent"], ["story", null], ["ls-aim", "calm"], ["ls-six", "calm"], ["ls-body", "data"], ["ls-range", "data"], ["ls-shot-sec", "data"], ["ls-count", "data"],
+             ["ls-buy", "data"], ["ls-where", "map"], ["ls-seenow", "calm"], ["ls-after", "calm"], ["ls-method", "silent"]];
   map.forEach(function (m) {
     var node = document.getElementById(m[0]);
     if (!node || !m[1]) return;

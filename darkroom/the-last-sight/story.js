@@ -87,14 +87,8 @@
   window.LS.PEOPLE = PEOPLE;
 
   // ---------------------------------------------------------------- language
-  var langBtn = document.getElementById("ls-lang");
-  function setLang(l) {
-    root.dataset.lang = l; root.lang = l === "bn" ? "bn" : "en";
-    try { localStorage.setItem("ls-lang", l); } catch (e) {}
-    document.dispatchEvent(new CustomEvent("ls-lang"));
-  }
-  try { if (localStorage.getItem("ls-lang") === "bn") setLang("bn"); } catch (e) {}
-  langBtn.addEventListener("click", function () { setLang(lang() === "bn" ? "en" : "bn"); });
+  // English only for now; the Bangla text stays in the page for a later Bangla edition
+  try { localStorage.removeItem("ls-lang"); } catch (e) {}
 
   // ---------------------------------------------------------------- sound
   var M = function (f, a) { if (window.LS.music) window.LS.music[f](a); };
@@ -208,7 +202,7 @@
   // ---------------------------------------------------------------- build the chapters
   // where each person's face sits in the wide photo, so a wide screen crops around it
   var FOCUS = { aman: "30% 40%", pulok: "52% 30%", "ripa-gomez": "50% 45%", sabbir: "55% 35%" };
-  var host = document.getElementById("ls-chapters"), nav = document.getElementById("ls-chnav");
+  var nav = document.getElementById("ls-chnav");   // the chapters sit in slots between the other sections
   PEOPLE.forEach(function (p, i) {
     var ch = el("article", "ch"); ch.id = "ch-" + p.id; ch.dataset.fx = p.fx; ch.dataset.state = "intro";
     ch.setAttribute("aria-label", p.name);
@@ -253,7 +247,7 @@
     }
     step("now", n);
     ch.appendChild(steps);
-    host.appendChild(ch);
+    document.querySelector('.ch-slot[data-p="' + p.id + '"]').appendChild(ch);
 
     // chapter nav: six faces
     var dot = el("a", "ch-dot"); dot.href = "#ch-" + p.id; dot.setAttribute("aria-label", p.name);
@@ -279,7 +273,16 @@
       es.forEach(function (e) { if (e.isIntersecting) nav.querySelectorAll(".ch-dot").forEach(function (d, k) { d.classList.toggle("on", k === i); }); });
     }, { rootMargin: "-50% 0px -50% 0px" }).observe(ch);
   });
-  new IntersectionObserver(function (es) { nav.classList.toggle("show", es[0].isIntersecting); }).observe(host);
+  // the six faces stay on screen from the first chapter to the end of the last, across the sections in between
+  var chs = document.querySelectorAll(".ch"), navTick = false;
+  function navShow() {
+    navTick = false;
+    var mid = innerHeight / 2;
+    nav.classList.toggle("show", chs[0].getBoundingClientRect().top < mid && chs[chs.length - 1].getBoundingClientRect().bottom > mid);
+    nav.classList.toggle("between", ![].some.call(chs, function (c) { var b = c.getBoundingClientRect(); return b.top < mid && b.bottom > mid; }));
+  }
+  addEventListener("scroll", function () { if (!navTick) { navTick = true; requestAnimationFrame(navShow); } }, { passive: true });
+  navShow();
 
   // ---------------------------------------------------------------- read aloud
   var readBtn = document.getElementById("ls-read"), reading = false, queue = [], current = null;

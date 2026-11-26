@@ -188,3 +188,42 @@ strong { color: var(--ink); }
 .xr-panel.on { opacity: 1; transform: none; }
 .xr-panel img { width: 100%; height: 100%; object-fit: contain; filter: contrast(1.1); }
 .xr-panel figcaption { font: .82rem/1.4 var(--sans); color: #d9ecff; padding: 8px 12px; background: rgba(2, 7, 12, .9); }
+
+/* how they see now: one banner (or the reader's camera), through each person's eyes */
+.ls-seenow { padding-top: clamp(96px, 13vw, 180px); }
+.sn { max-width: 980px; margin: 0 auto; padding: 0 var(--gutter); }
+.sn-view { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 14px; background: #000; }
+.sn-view img, .sn-view video { position: absolute; inset: -2%; width: 104%; height: 104%; object-fit: cover; transition: filter 1.6s var(--ease), opacity 1.6s var(--ease), transform 1.6s var(--ease); }
+.sn-view video { display: none; transform: scaleX(1); }
+.sn-view.cam video { display: block; } .sn-view.cam img { display: none; }
+.sn-ghost { opacity: 0; mix-blend-mode: screen; }
+.sn-veil { position: absolute; inset: 0; opacity: 0; transition: opacity 1.8s var(--ease), background 1.8s; pointer-events: none; }
+.sn-over { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; font: 800 clamp(1.4rem, 1rem + 2vw, 2.4rem) var(--sans); color: rgba(243, 238, 226, .5); opacity: 0; transition: opacity 2s var(--ease) 1.2s; }
+/* Pulok's injured eye: dark, a little light at one edge */
+.sn-view[data-who="pulok"] .sn-base { filter: blur(18px) brightness(.7) saturate(.4); }
+.sn-view[data-who="pulok"] .sn-veil { opacity: 1; background: radial-gradient(ellipse 30% 70% at 100% 50%, transparent, rgba(0, 0, 0, .9) 55%, #000 80%); }
+/* Safwan: the white, slowly clearing */
+.sn-view[data-who="safwan"] .sn-veil { background: #f4f2ec; animation: sn-clear 7s var(--ease) forwards; }
+@keyframes sn-clear { 0% { opacity: .97; } 100% { opacity: 0; } }
+/* Jashim: one eye gone, reading hurts */
+.sn-view[data-who="jashim"] .sn-base { filter: blur(1.5px) saturate(.85); }
+.sn-view[data-who="jashim"] .sn-veil { opacity: 1; background: linear-gradient(90deg, #000 0 32%, rgba(0, 0, 0, .85) 40%, transparent 58%); }
+/* Ripa: everything twice */
+.sn-view[data-who="ripa"] .sn-ghost { opacity: .55; transform: translate(3.5%, 1.4%); }
+.sn-view[data-who="ripa"] .sn-base { filter: blur(.6px); }
+/* Aman and Sabbir: no light */
+.sn-view:is([data-who="aman"], [data-who="sabbir"]) .sn-base { opacity: 0; filter: blur(30px); }
+.sn-view:is([data-who="aman"], [data-who="sabbir"]) .sn-veil { opacity: 1; background: #000; }
+.sn-view:is([data-who="aman"], [data-who="sabbir"]) .sn-over { opacity: 1; }
+.sn-who { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin: 16px 0 0; }
+.sn-face { display: grid; justify-items: center; gap: 6px; padding: 0; background: none; border: 0; color: var(--ink-2); cursor: pointer; font: 700 .85rem var(--sans); }
+.sn-face img, .sn-init { width: min(64px, 100%); aspect-ratio: 1; border-radius: 50%; object-fit: cover; border: 2px solid var(--line); filter: grayscale(1); opacity: .65; transition: opacity .3s, border-color .3s, filter .3s; }
+.sn-init { display: grid; place-items: center; background: #1d1414; font-size: 1.1rem; }
+.sn-face[aria-pressed="true"] { color: var(--ink); }
+.sn-face[aria-pressed="true"] img, .sn-face[aria-pressed="true"] .sn-init { opacity: 1; filter: none; border-color: var(--safe); }
+.sn-now { font-size: clamp(1.05rem, 1rem + .3vw, 1.25rem); min-height: 4.4em; margin: 1.2rem 0 .4rem; }
+.sn-try { font: 700 1rem/1.4 var(--sans); color: var(--safe); min-height: 2.8em; margin: 0 0 1.2rem; }
+.sn-cam-ui { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-bottom: 1rem; }
+.sn-cam-ui .ls-note { margin: 0; flex: 1 1 260px; }
+@media (max-width: 560px) { .sn-who { gap: 4px; } .sn-face { font-size: .72rem; } .sn-view { aspect-ratio: 4 / 3; } }
+@media (prefers-reduced-motion: reduce) { .sn-view img, .sn-view video, .sn-veil, .sn-over { transition: none; } .sn-view[data-who="safwan"] .sn-veil { animation: none; opacity: 0; } }

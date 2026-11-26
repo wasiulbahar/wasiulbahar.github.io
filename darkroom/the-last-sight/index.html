@@ -17,8 +17,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Noto+Serif+Bengali:wght@400;600&family=Hind+Siliguri:wght@500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-<link rel="stylesheet" href="story.css">
-<link rel="stylesheet" href="sections.css">
+<link rel="stylesheet" href="story.css?v=a320c4c3">
+<link rel="stylesheet" href="sections.css?v=133eb491">
 <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }</script>
 </head>
 <body>
@@ -28,9 +28,8 @@
 <header class="ls-top">
   <a href="/darkroom.html" class="ls-home">Darkroom</a>
   <div class="ls-tools">
-    <button class="ls-pill" id="ls-lang" type="button" aria-label="বাংলায় পড়ুন / Read in English"><span class="en" lang="bn">বাংলা</span><span class="bn-t">English</span></button>
     <button class="ls-pill" id="ls-read" type="button" aria-pressed="false"><span class="en">Read aloud</span><span class="bn-t" lang="bn">পড়ে শোনান</span></button>
-    <button class="ls-pill" id="ls-music" type="button" aria-pressed="false"><span class="en">Music</span><span class="bn-t" lang="bn">সংগীত</span></button>
+    <button class="ls-pill" id="ls-music" type="button" aria-pressed="false"><span class="en">Ambience</span><span class="bn-t" lang="bn">আবহ</span></button>
     <button class="ls-pill ls-mode" id="ls-mode" type="button" aria-pressed="false"><span class="ls-mode-icon" aria-hidden="true"></span><span class="ls-mode-label"><span class="en">Sound</span><span class="bn-t" lang="bn">শব্দ</span></span></button>
   </div>
 </header>
@@ -45,7 +44,7 @@
       <button class="ls-btn ls-btn-on" type="button" data-start="listen"><span class="en">Listen with sound</span><span class="bn-t" lang="bn">শব্দসহ শুনুন</span></button>
       <button class="ls-btn" type="button" data-start="read"><span class="en">Read without sound</span><span class="bn-t" lang="bn">শব্দ ছাড়া পড়ুন</span></button>
     </div>
-    <p class="ls-gate-note"><span class="en">With sound, a quiet original score plays underneath; it falls away whenever a survivor speaks, and the Music button turns it off. Every recording is also written out, in English and in the original Bangla. “Read aloud” at the top reads the whole story to you. This story describes serious injuries; it shows no wounds.</span><span class="bn-t" lang="bn">শব্দ চালু করলে নিচে মৃদু একটি মৌলিক সুর বাজবে; আহতদের কেউ কথা বললে তা সরে যায়, আর “সংগীত” বোতামে বন্ধ করা যায়। প্রতিটি রেকর্ডিং লেখা আকারেও আছে, ইংরেজি ও মূল বাংলায়। ওপরের “পড়ে শোনান” বোতাম পুরো গল্পটি পড়ে শোনাবে। এই গল্পে গুরুতর আঘাতের বর্ণনা আছে; কোনো ক্ষতের ছবি নেই।</span></p>
+    <p class="ls-gate-note"><span class="en">With sound, you hear the street, the crowd and the shot, built from real recordings; it includes gunfire. It falls away whenever a survivor speaks, and the Ambience button turns it off. Every recording is also written out, in English and in the original Bangla. “Read aloud” at the top reads the whole story to you. This story describes serious injuries; it shows no wounds.</span><span class="bn-t" lang="bn">শব্দ চালু করলে আসল রেকর্ডিং থেকে তৈরি রাস্তা, ভিড় আর গুলির শব্দ শোনা যাবে; এতে গুলির শব্দ আছে। আহতদের কেউ কথা বললে তা সরে যায়, আর “আবহ” বোতামে বন্ধ করা যায়। প্রতিটি রেকর্ডিং লেখা আকারেও আছে, ইংরেজি ও মূল বাংলায়। ওপরের “পড়ে শোনান” বোতাম পুরো গল্পটি পড়ে শোনাবে। এই গল্পে গুরুতর আঘাতের বর্ণনা আছে; কোনো ক্ষতের ছবি নেই।</span></p>
   </div>
 </section>
 
@@ -98,28 +97,8 @@
   <p class="bn-t" lang="bn">ধীরে ধীরে নিচে নামুন। আপনি দাঁড়াবেন সেখানে, যেখানে তাঁরা দাঁড়িয়ে ছিলেন; দেখবেন তাঁরা যা দেখেছিলেন, আর এখন যা দেখেন।</p>
 </section>
 
-<!-- 2. Six people: one chapter each -->
-<section class="ls-six" id="ls-six" aria-labelledby="six-h">
-  <div class="ls-six-head">
-    <p class="ls-kicker"><span class="en">Six people</span><span class="bn-t" lang="bn">ছয়জন মানুষ</span></p>
-    <h2 id="six-h"><span class="en">Different places. Different reasons. The same wounds.</span><span class="bn-t" lang="bn">ভিন্ন জায়গা। ভিন্ন কারণ। একই ক্ষত।</span></h2>
-  </div>
-  <nav class="ls-chnav" id="ls-chnav" aria-label="The six chapters"></nav>
-  <div id="ls-chapters"></div>
-</section>
-
-<section class="ls-prose" aria-label="The pattern">
-  <p class="en">Their circumstances were different. Pulok was filming. Safwan had turned away. Jashim was at the front. Aman was trying to calm the students. Ripa was treating the wounded. Sabbir had a job, a wife and a family at home.</p>
-  <p class="bn-t" lang="bn">তাঁদের পরিস্থিতি আলাদা ছিল। পুলক ভিডিও করছিলেন। সাফওয়ান মুখ ঘুরিয়ে ছিলেন। জসিম ছিলেন সবার সামনে। আমান শিক্ষার্থীদের শান্ত করার চেষ্টা করছিলেন। রিপা আহতদের সেবা দিচ্ছিলেন। সাব্বিরের ছিল চাকরি, স্ত্রী আর বাড়িতে পরিবার।</p>
-  <p class="ls-pull"><span class="en">Their injuries were not different. All six were hit in the eyes or face.</span><span class="bn-t" lang="bn">তাঁদের আঘাত আলাদা ছিল না। ছয়জনেরই গুলি লেগেছে চোখে বা মুখে।</span></p>
-</section>
-
-<!-- 3. Where would you aim, then the X-ray -->
-<section class="ls-body" id="ls-body" aria-labelledby="body-h">
-  <div class="ls-sec-head">
-    <p class="ls-kicker"><span class="en">Where the pellets landed</span><span class="bn-t" lang="bn">গুলি কোথায় লেগেছে</span></p>
-    <h2 id="body-h"><span class="en">Aim below the waist. They hit above the neck.</span><span class="bn-t" lang="bn">নিয়ম কোমরের নিচে। গুলি লেগেছে ঘাড়ের ওপরে।</span></h2>
-  </div>
+<!-- 2. First, a question -->
+<section class="ls-body ls-aim" id="ls-aim" aria-label="A question">
   <div class="ls-game" id="ls-game">
     <div class="ls-game-fig"><svg id="aim-svg" role="img" aria-labelledby="aim-desc"><desc id="aim-desc">A real X-ray of a body, head to mid-thigh. Tap where you think police are allowed to aim crowd-control projectiles.</desc></svg><p class="ls-credit"><span class="en">X-ray adapted from Evangelopoulos et al. (2009), CC BY 2.0. Not a survivor’s scan.</span><span class="bn-t" lang="bn">এক্স-রে: Evangelopoulos et al. (2009) থেকে সম্পাদিত, CC BY 2.0। কোনো আহতের স্ক্যান নয়।</span></p></div>
     <div class="ls-game-text">
@@ -128,6 +107,25 @@
       <div class="ls-game-zones" id="aim-zones" role="group" aria-label="Or choose a part of the body"></div>
       <p class="ls-game-answer" id="aim-answer" aria-live="polite"></p>
     </div>
+  </div>
+</section>
+
+<!-- 3. Six people, one at a time -->
+<section class="ls-six" id="ls-six" aria-labelledby="six-h">
+  <div class="ls-six-head">
+    <p class="ls-kicker"><span class="en">Six people</span><span class="bn-t" lang="bn">ছয়জন মানুষ</span></p>
+    <h2 id="six-h"><span class="en">Different places. Different reasons. The same wounds.</span><span class="bn-t" lang="bn">ভিন্ন জায়গা। ভিন্ন কারণ। একই ক্ষত।</span></h2>
+  </div>
+  <nav class="ls-chnav" id="ls-chnav" aria-label="The six chapters"></nav>
+</section>
+
+<div class="ch-slot" data-p="pulok"></div>
+
+<!-- 4. The X-ray -->
+<section class="ls-body" id="ls-body" aria-labelledby="body-h">
+  <div class="ls-sec-head">
+    <p class="ls-kicker"><span class="en">Where the pellets landed</span><span class="bn-t" lang="bn">গুলি কোথায় লেগেছে</span></p>
+    <h2 id="body-h"><span class="en">Aim below the waist. They hit above the neck.</span><span class="bn-t" lang="bn">নিয়ম কোমরের নিচে। গুলি লেগেছে ঘাড়ের ওপরে।</span></h2>
   </div>
   <div class="ls-scrolly">
     <div class="ls-scrolly-fig xray" aria-hidden="true"><div class="xr-stack"><svg id="xray-svg"></svg><figure class="xr-panel" id="xray-panel"><img alt=""><figcaption></figcaption></figure></div><p class="ls-fig-label" id="xray-label"></p><p class="ls-xcount" id="xray-count" hidden></p></div>
@@ -159,45 +157,9 @@
       </div>
     </div>
   </div>
-  <div class="ls-prose ls-tight">
-    <p class="en">One person can be an accident. Two can be a coincidence. But when protesters, bystanders and a nurse, standing in different places on different days, describe the same shots to the face and eyes, the question changes.</p>
-    <p class="bn-t" lang="bn">একজন হলে দুর্ঘটনা হতে পারে। দুজন হলে কাকতালীয়। কিন্তু যখন আন্দোলনকারী, পথচারী আর একজন নার্স, ভিন্ন জায়গায়, ভিন্ন দিনে দাঁড়িয়ে, মুখে আর চোখে একই রকম গুলির কথা বলেন, তখন প্রশ্নটা বদলে যায়।</p>
-    <p class="ls-pull"><span class="en">It is whether the injury itself became part of the method.</span><span class="bn-t" lang="bn">প্রশ্নটা হয়: আঘাত করাটাই কি পদ্ধতির অংশ হয়ে উঠেছিল?</span></p>
-  </div>
 </section>
 
-<!-- 4. The cartridge, then pellets in flight -->
-<section class="ls-range" id="ls-range" aria-labelledby="range-h">
-  <div class="ls-sec-head">
-    <p class="ls-kicker"><span class="en">The weapon</span><span class="bn-t" lang="bn">অস্ত্রটি</span></p>
-    <h2 id="range-h"><span class="en">One cartridge. Up to 200 metal pellets.</span><span class="bn-t" lang="bn">একটি কার্তুজ। ২০০টি পর্যন্ত ধাতব ছররা।</span></h2>
-    <p><span class="en">Birdshot was made for hunting small, fast birds. Drag to turn the cartridge; open it to see what is inside.</span><span class="bn-t" lang="bn">ছররা বানানো হয়েছিল ছোট, দ্রুতগামী পাখি শিকারের জন্য। কার্তুজটি ঘোরাতে টেনে ধরুন; ভেতরে কী আছে দেখতে খুলুন।</span></p>
-  </div>
-  <div class="ls-shell">
-    <div class="ls-shell-stage" id="shell-stage" role="img" aria-label="A 3D model of a 12-gauge shotgun cartridge that opens and spills its pellets"><canvas id="shell-canvas"></canvas><p class="ls-shell-fallback" id="shell-fallback" hidden>The 3D model could not load on this device.</p></div>
-    <div class="ls-shell-ui">
-      <button class="ls-btn ls-btn-on" type="button" id="shell-open"><span class="en">Open the cartridge</span><span class="bn-t" lang="bn">কার্তুজটি খুলুন</span></button>
-      <p class="ls-shell-count" id="shell-count" aria-live="polite"></p>
-    </div>
-  </div>
-
-  <div class="ls-sec-head ls-sub-head">
-    <h3><span class="en">At the distance Aman describes, almost every pellet lands on a face.</span><span class="bn-t" lang="bn">আমান যে দূরত্বের কথা বলেছেন, সেখান থেকে প্রায় সব ছররা লাগে মুখে।</span></h3>
-    <p><span class="en">Choose a distance and fire, in slow motion.</span><span class="bn-t" lang="bn">দূরত্ব বেছে নিন, তারপর ধীরগতিতে গুলি ছুড়ুন।</span></p>
-  </div>
-  <div class="ls-range-box">
-    <div class="ls-shot"><canvas id="shot" width="1200" height="460" aria-label="A shotgun fires about 200 pellets toward a head at the chosen distance"></canvas></div>
-    <div class="ls-shot-ui">
-      <label for="dist"><span class="en">Distance</span><span class="bn-t" lang="bn">দূরত্ব</span></label>
-      <input type="range" id="dist" min="2" max="40" step="1" value="4">
-      <output id="dist-out">4 m</output>
-      <button class="ls-fire" id="fire" type="button"><span class="en">Fire, in slow motion</span><span class="bn-t" lang="bn">ধীরগতিতে গুলি</span></button>
-    </div>
-    <p class="ls-range-read" id="shot-read" aria-live="polite"></p>
-    <ul class="ls-range-marks" id="range-marks"></ul>
-    <p class="ls-note"><span class="en">A simulation, not a ballistics model: the spread follows a rule of thumb of about 2.5 cm per metre. The danger ranges are from David Bruce, a policing researcher who has studied crowd-control weapons for more than a decade.</span><span class="bn-t" lang="bn">এটি একটি সিমুলেশন, ব্যালিস্টিক মডেল নয়: ছড়িয়ে পড়ার হিসাব মোটামুটি প্রতি মিটারে ২.৫ সেন্টিমিটার। বিপদসীমার তথ্য ডেভিড ব্রুসের, যিনি এক দশকের বেশি সময় ধরে ভিড় নিয়ন্ত্রণের অস্ত্র নিয়ে গবেষণা করছেন।</span></p>
-  </div>
-</section>
+<div class="ch-slot" data-p="safwan"></div>
 
 <!-- 5. The count: eyes that close -->
 <section class="ls-count" id="ls-count" aria-labelledby="count-h">
@@ -215,6 +177,27 @@
     <p class="ls-small bn-t" lang="bn">দমন-পীড়নের কয়েক সপ্তাহ পর ইনস্টিটিউটের পরিচালক হন ডা. খায়ের আহমেদ চৌধুরী; এক বছরের বেশি সময় রোগীদের চিকিৎসা করেছেন। তাঁর হিসাবে এক চোখ হারানো মানুষের সংখ্যা এখন প্রায় ৪৫০।</p>
   </div>
 </section>
+
+<div class="ch-slot" data-p="jashim"></div>
+
+<!-- The cartridge -->
+<section class="ls-range" id="ls-range" aria-labelledby="range-h">
+  <div class="ls-sec-head">
+    <p class="ls-kicker"><span class="en">The weapon</span><span class="bn-t" lang="bn">অস্ত্রটি</span></p>
+    <h2 id="range-h"><span class="en">One cartridge. Up to 200 metal pellets.</span><span class="bn-t" lang="bn">একটি কার্তুজ। ২০০টি পর্যন্ত ধাতব ছররা।</span></h2>
+    <p><span class="en">Birdshot was made for hunting small, fast birds. Drag to turn the cartridge; open it to see what is inside.</span><span class="bn-t" lang="bn">ছররা বানানো হয়েছিল ছোট, দ্রুতগামী পাখি শিকারের জন্য। কার্তুজটি ঘোরাতে টেনে ধরুন; ভেতরে কী আছে দেখতে খুলুন।</span></p>
+  </div>
+  <div class="ls-shell">
+    <div class="ls-shell-stage" id="shell-stage" role="img" aria-label="A 3D model of a 12-gauge shotgun cartridge that opens and spills its pellets"><canvas id="shell-canvas"></canvas><p class="ls-shell-fallback" id="shell-fallback" hidden>The 3D model could not load on this device.</p></div>
+    <div class="ls-shell-ui">
+      <button class="ls-btn ls-btn-on" type="button" id="shell-open"><span class="en">Open the cartridge</span><span class="bn-t" lang="bn">কার্তুজটি খুলুন</span></button>
+      <p class="ls-shell-count" id="shell-count" aria-live="polite"></p>
+    </div>
+  </div>
+
+</section>
+
+<div class="ch-slot" data-p="ripa"></div>
 
 <!-- 6. Bought in advance: cartridges piling up -->
 <section class="ls-buy" id="ls-buy" aria-labelledby="buy-h">
@@ -241,6 +224,31 @@
   </div>
 </section>
 
+<div class="ch-slot" data-p="aman"></div>
+
+<!-- Pellets in flight -->
+<section class="ls-range ls-shot-sec" id="ls-shot-sec" aria-labelledby="shot-h">
+  <div class="ls-sec-head">
+    <p class="ls-kicker"><span class="en">In flight</span><span class="bn-t" lang="bn">ছুটে যাওয়া ছররা</span></p>
+    <h2 id="shot-h"><span class="en">At the distance Aman describes, almost every pellet lands on a face.</span><span class="bn-t" lang="bn">আমান যে দূরত্বের কথা বলেছেন, সেখান থেকে প্রায় সব ছররা লাগে মুখে।</span></h2>
+    <p><span class="en">Choose a distance and fire, in slow motion.</span><span class="bn-t" lang="bn">দূরত্ব বেছে নিন, তারপর ধীরগতিতে গুলি ছুড়ুন।</span></p>
+  </div>
+  <div class="ls-range-box">
+    <div class="ls-shot"><canvas id="shot" width="1200" height="460" aria-label="A shotgun fires about 200 pellets toward a head at the chosen distance"></canvas></div>
+    <div class="ls-shot-ui">
+      <label for="dist"><span class="en">Distance</span><span class="bn-t" lang="bn">দূরত্ব</span></label>
+      <input type="range" id="dist" min="2" max="40" step="1" value="4">
+      <output id="dist-out">4 m</output>
+      <button class="ls-fire" id="fire" type="button"><span class="en">Fire, in slow motion</span><span class="bn-t" lang="bn">ধীরগতিতে গুলি</span></button>
+    </div>
+    <p class="ls-range-read" id="shot-read" aria-live="polite"></p>
+    <ul class="ls-range-marks" id="range-marks"></ul>
+    <p class="ls-note"><span class="en">A simulation, not a ballistics model: the spread follows a rule of thumb of about 2.5 cm per metre. The danger ranges are from David Bruce, a policing researcher who has studied crowd-control weapons for more than a decade.</span><span class="bn-t" lang="bn">এটি একটি সিমুলেশন, ব্যালিস্টিক মডেল নয়: ছড়িয়ে পড়ার হিসাব মোটামুটি প্রতি মিটারে ২.৫ সেন্টিমিটার। বিপদসীমার তথ্য ডেভিড ব্রুসের, যিনি এক দশকের বেশি সময় ধরে ভিড় নিয়ন্ত্রণের অস্ত্র নিয়ে গবেষণা করছেন।</span></p>
+  </div>
+</section>
+
+<div class="ch-slot" data-p="sabbir"></div>
+
 <!-- 7. The map: a flyover -->
 <section class="ls-where" id="ls-where" aria-labelledby="where-h">
   <div class="ls-sec-head">
@@ -256,6 +264,44 @@
     <h3><span class="en">A weapon for birds, used on people, around the world.</span><span class="bn-t" lang="bn">পাখি শিকারের অস্ত্র, মানুষের ওপর, সারা বিশ্বে।</span></h3>
   </div>
   <ol class="ls-world" id="ls-world" tabindex="0" aria-label="Timeline of pellet and rubber-round eye injuries around the world"></ol>
+</section>
+
+<!-- How they see now -->
+<section class="ls-seenow" id="ls-seenow" aria-labelledby="seenow-h">
+  <div class="ls-sec-head">
+    <p class="ls-kicker"><span class="en">Now</span><span class="bn-t" lang="bn">এখন</span></p>
+    <h2 id="seenow-h"><span class="en">The same street, through their eyes today.</span><span class="bn-t" lang="bn">একই রাস্তা, আজ তাঁদের চোখে।</span></h2>
+    <p><span class="en">A banner from July. Choose a person.</span><span class="bn-t" lang="bn">জুলাইয়ের একটি ব্যানার। একজনকে বেছে নিন।</span></p>
+  </div>
+  <div class="sn">
+    <div class="sn-view" id="sn-view" data-who="none" role="img" aria-label="A protest banner from July 2024, shown as the chosen person sees today">
+      <img class="sn-base" src="media/street-ripa.jpg" alt="" loading="lazy">
+      <img class="sn-ghost" src="media/street-ripa.jpg" alt="" loading="lazy" aria-hidden="true">
+      <video class="sn-base sn-cam" muted playsinline aria-hidden="true"></video>
+      <video class="sn-ghost sn-cam" muted playsinline aria-hidden="true"></video>
+      <div class="sn-veil"></div>
+      <p class="sn-over" id="sn-over"></p>
+    </div>
+    <div class="sn-who" id="sn-who" role="group" aria-label="Choose a person"></div>
+    <p class="sn-now" id="sn-now" aria-live="polite"></p>
+    <p class="sn-try" id="sn-try"></p>
+    <div class="sn-cam-ui">
+      <button class="ls-btn" type="button" id="sn-cam-btn"><span class="en">See your own room this way</span><span class="bn-t" lang="bn">নিজের ঘর এভাবে দেখুন</span></button>
+      <p class="ls-note" id="sn-cam-note"><span class="en">Uses your camera. The picture stays on your device; nothing is recorded or sent.</span><span class="bn-t" lang="bn">আপনার ক্যামেরা ব্যবহার করে। ছবি আপনার ডিভাইসেই থাকে; কিছু রেকর্ড বা পাঠানো হয় না।</span></p>
+    </div>
+    <p class="ls-note"><span class="en">An approximation, drawn from how each of them described their sight. No picture can show exactly what another person sees.</span><span class="bn-t" lang="bn">প্রত্যেকে নিজের দৃষ্টির যে বর্ণনা দিয়েছেন, তা থেকে আঁকা একটি আনুমানিক চিত্র।</span></p>
+  </div>
+</section>
+
+<section class="ls-prose" aria-label="The pattern">
+  <p class="en">Their circumstances were different. Pulok was filming. Safwan had turned away. Jashim was at the front. Aman was trying to calm the students. Ripa was treating the wounded. Sabbir had a job, a wife and a family at home.</p>
+  <p class="bn-t" lang="bn">তাঁদের পরিস্থিতি আলাদা ছিল। পুলক ভিডিও করছিলেন। সাফওয়ান মুখ ঘুরিয়ে ছিলেন। জসিম ছিলেন সবার সামনে। আমান শিক্ষার্থীদের শান্ত করার চেষ্টা করছিলেন। রিপা আহতদের সেবা দিচ্ছিলেন। সাব্বিরের ছিল চাকরি, স্ত্রী আর বাড়িতে পরিবার।</p>
+  <p class="ls-pull"><span class="en">Their injuries were not different. All six were hit in the eyes or face.</span><span class="bn-t" lang="bn">তাঁদের আঘাত আলাদা ছিল না। ছয়জনেরই গুলি লেগেছে চোখে বা মুখে।</span></p>
+  <div class="ls-prose ls-tight">
+    <p class="en">One person can be an accident. Two can be a coincidence. But when protesters, bystanders and a nurse, standing in different places on different days, describe the same shots to the face and eyes, the question changes.</p>
+    <p class="bn-t" lang="bn">একজন হলে দুর্ঘটনা হতে পারে। দুজন হলে কাকতালীয়। কিন্তু যখন আন্দোলনকারী, পথচারী আর একজন নার্স, ভিন্ন জায়গায়, ভিন্ন দিনে দাঁড়িয়ে, মুখে আর চোখে একই রকম গুলির কথা বলেন, তখন প্রশ্নটা বদলে যায়।</p>
+    <p class="ls-pull"><span class="en">It is whether the injury itself became part of the method.</span><span class="bn-t" lang="bn">প্রশ্নটা হয়: আঘাত করাটাই কি পদ্ধতির অংশ হয়ে উঠেছিল?</span></p>
+  </div>
 </section>
 
 <!-- 8. Before and after -->
@@ -294,7 +340,7 @@
     <li>Sabbir was hit by a bullet, not by pellets. He is included because his injury was to the eye, in the same crackdown.</li>
     <li>Safwan’s sight has largely returned; the white he describes was fluid leaking inside the eye.</li>
     <li>The pellet flight is a simulation; the map locations are approximate.</li>
-    <li>The music is an original score written for this page: a drone, low strings, a heartbeat and a bansuri phrase in raga Bhairavi. It contains no recorded gunfire or crowd sound.</li>
+    <li>The sound is built from real recordings, none of them from July 2024 or from Bangladesh: a street, a crowd and a helicopter, a heartbeat, a fan and monsoon rain, and a gunshot (a pistol, standing in for a shotgun). The ringing after each shot is synthesised. There is no music. Recordings by eguobyte, 15HPanska_Ruttner_Jan, JoBrodie and Wilfredor (CC0); Work With Sounds / Technical Museum of Slovenia (CC BY 4.0), RHumphries (CC BY 3.0), Gravity Sound (CC BY 4.0) and Dantedun (CC BY-SA 4.0), all on Wikimedia Commons; cut, filtered and mixed for this page.</li>
     <li>The Bangla version of this page is a draft translation.</li>
   </ul>
   <h3>Sources</h3>
@@ -316,9 +362,10 @@
 
 <audio id="ls-audio" preload="none"></audio>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<script src="story.js"></script>
-<script src="music.js"></script>
-<script src="sections.js"></script>
-<script type="module" src="cartridge.js"></script>
+<script src="story.js?v=42cb0373"></script>
+<script src="music.js?v=a32f1e19"></script>
+<script src="sections.js?v=18e856da"></script>
+<script src="seenow.js?v=31602cfb"></script>
+<script type="module" src="cartridge.js?v=1f01ae0f"></script>
 </body>
 </html>
