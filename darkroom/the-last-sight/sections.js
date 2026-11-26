@@ -37,18 +37,16 @@
   // 3a. Where would you aim? Tap the X-ray.
   var aim = document.getElementById("aim-svg");
   if (aim) {
-    var aimShapes = xrayBase(aim, "aimfig"), answered = false, ans = document.getElementById("aim-answer");
+    var aimShapes = xrayBase(aim, "aimfig"), ans = document.getElementById("aim-answer");
     var zb = document.getElementById("aim-zones");
-    var pick = function (z) {
-      if (answered) return;
-      answered = true;
+    var pick = function (z) {   // readers can keep trying other parts; the answer follows each tap
       Object.keys(aimShapes).forEach(function (k) { aimShapes[k].setAttribute("class", "zone" + (ALLOWED.indexOf(k) >= 0 ? " on ok" : "") + (k === z ? " picked" : "")); });
       var right = ALLOWED.indexOf(z) >= 0;
       ans.textContent = "";
       ans.appendChild(both("span", null,
-        (right ? "Right. " : "No. ") + "The rules allow only the lower abdomen and legs, in green. In July 2024, the wounds were in the head, face, neck and chest. Scroll on.",
-        (right ? "ঠিক। " : "না। ") + "নিয়ম অনুযায়ী শুধু তলপেট ও পা, সবুজ অংশে। ২০২৪ সালের জুলাইয়ে ক্ষত ছিল মাথা, মুখ, ঘাড় আর বুকে। নিচে নামুন।"));
-      zb.querySelectorAll("button").forEach(function (b) { b.disabled = true; b.classList.toggle("picked", b.dataset.z === z); });
+        (right ? "Right: " + NAMES[z][0] + ". " : "Not the " + NAMES[z][0] + ". ") + "The rules allow only the lower abdomen and legs, in green. In July 2024, the wounds were in the head, face, neck and chest. Scroll on.",
+        (right ? "ঠিক: " + NAMES[z][1] + "। " : NAMES[z][1] + " নয়। ") + "নিয়ম অনুযায়ী শুধু তলপেট ও পা, সবুজ অংশে। ২০২৪ সালের জুলাইয়ে ক্ষত ছিল মাথা, মুখ, ঘাড় আর বুকে। নিচে নামুন।"));
+      zb.querySelectorAll("button").forEach(function (b) { b.classList.toggle("picked", b.dataset.z === z); b.setAttribute("aria-pressed", String(b.dataset.z === z)); });
     };
     Object.keys(NAMES).forEach(function (z) {
       if (aimShapes[z]) aimShapes[z].addEventListener("click", function () { pick(z); });
@@ -145,22 +143,36 @@
     var dist = document.getElementById("dist"), dout = document.getElementById("dist-out"), read = document.getElementById("shot-read");
     var MUZ = { x: 150, y: 230 }, TX = W - 190, TY = 228, FACE = { rx: 62, ry: 80 }, PXCM = 124 / 15;
     var pellets = [], hits = [], t0 = 0, running = false, rnd = Math.random;
+    var HEAD = new Image(); HEAD.onload = function () { if (!running) scene(0); }; HEAD.src = "media/xray-head.jpg";
     var gauss = function () { var u = 0, v = 0; while (!u) u = rnd(); while (!v) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
     var scene = function (flash) {
       cx.fillStyle = "#070404"; cx.fillRect(0, 0, W, H);
       var g = cx.createRadialGradient(TX, TY, 10, TX, TY, 420); g.addColorStop(0, "rgba(90,40,40,.18)"); g.addColorStop(1, "rgba(0,0,0,0)");
       cx.fillStyle = g; cx.fillRect(0, 0, W, H);
       cx.strokeStyle = "rgba(255,255,255,.08)"; cx.setLineDash([6, 10]); cx.beginPath(); cx.moveTo(MUZ.x, 400); cx.lineTo(TX, 400); cx.stroke(); cx.setLineDash([]);
-      cx.fillStyle = "rgba(243,238,226,.6)"; cx.font = "600 18px 'Bricolage Grotesque', sans-serif"; cx.textAlign = "center";
-      cx.fillText(dist.value + (bn() ? " মিটার · মাপমতো নয়" : " metres · not to scale"), (MUZ.x + TX) / 2, 432);
       cx.fillStyle = "#3b3330";
       cx.beginPath(); cx.moveTo(20, 222); cx.lineTo(150, 222); cx.lineTo(150, 238); cx.lineTo(70, 240); cx.lineTo(54, 262); cx.lineTo(20, 270); cx.closePath(); cx.fill();
       cx.fillStyle = "#4a403b"; cx.fillRect(60, 238, 60, 8);
-      var hg = cx.createRadialGradient(TX - 18, TY - 26, 8, TX, TY, 110); hg.addColorStop(0, "#3a2c2a"); hg.addColorStop(1, "#1a1212");
-      cx.fillStyle = hg; cx.beginPath(); cx.ellipse(TX, TY, FACE.rx, FACE.ry, 0, 0, Math.PI * 2); cx.fill();
-      cx.beginPath(); cx.moveTo(TX - 150, H); cx.quadraticCurveTo(TX - 140, TY + 110, TX, TY + 95); cx.quadraticCurveTo(TX + 140, TY + 110, TX + 150, H); cx.fill();
-      cx.fillStyle = "#0b0606"; cx.beginPath(); cx.ellipse(TX - 22, TY - 12, 9, 6, 0, 0, Math.PI * 2); cx.ellipse(TX + 22, TY - 12, 9, 6, 0, 0, Math.PI * 2); cx.fill();
-      hits.forEach(function (h) { cx.fillStyle = h.face ? "rgba(255,80,80,.95)" : "rgba(200,190,180,.35)"; cx.beginPath(); cx.arc(h.x, h.y, h.face ? 2.4 : 1.6, 0, Math.PI * 2); cx.fill(); });
+      // the target: a real X-ray of a head (cropped from the scan above), its face lined up with the area counted as "the face"
+      if (HEAD.complete && HEAD.naturalWidth) {   // "screen" drops the film's black, so only the bone shows, with soft edges
+        var S = .76, hx = TX - 280 * S, hy = TY - 165 * S, hw = HEAD.naturalWidth * S, hh = HEAD.naturalHeight * S;
+        cx.save(); cx.globalCompositeOperation = "screen"; cx.drawImage(HEAD, hx, hy, hw, hh); cx.restore();
+        var fade = cx.createLinearGradient(0, hy + hh * .78, 0, hy + hh); fade.addColorStop(0, "rgba(7,4,4,0)"); fade.addColorStop(1, "#070404");
+        cx.fillStyle = fade; cx.fillRect(hx, hy + hh * .78, hw, hh * .22 + 1);
+        [[hx, hx + hw * .22], [hx + hw, hx + hw * .78]].forEach(function (e) {   // and at the sides, so the shoulders melt into the dark
+          var sg = cx.createLinearGradient(e[0], 0, e[1], 0); sg.addColorStop(0, "#070404"); sg.addColorStop(1, "rgba(7,4,4,0)");
+          cx.fillStyle = sg; cx.fillRect(Math.min(e[0], e[1]), hy, Math.abs(e[1] - e[0]) + 1, hh);
+        });
+      }
+      // pellets that land show as they do on a real film: bright specks; the rest pass by, faint
+      hits.forEach(function (h) {
+        if (h.face) { cx.shadowColor = "rgba(220,240,255,.9)"; cx.shadowBlur = 6; cx.fillStyle = "#fff"; }
+        else { cx.shadowBlur = 0; cx.fillStyle = "rgba(200,190,180,.3)"; }
+        cx.beginPath(); cx.arc(h.x, h.y, h.face ? 2.6 : 1.6, 0, Math.PI * 2); cx.fill();
+      });
+      cx.shadowBlur = 0;
+      cx.fillStyle = "rgba(243,238,226,.6)"; cx.font = "600 18px 'Bricolage Grotesque', sans-serif"; cx.textAlign = "center";
+      cx.fillText(dist.value + (bn() ? " মিটার · মাপমতো নয়" : " metres · not to scale"), (MUZ.x + TX) / 2, 432);
       if (flash > 0) {
         var f = cx.createRadialGradient(MUZ.x + 10, MUZ.y, 2, MUZ.x + 10, MUZ.y, 120 * flash);
         f.addColorStop(0, "rgba(255,250,220," + flash + ")"); f.addColorStop(.25, "rgba(255,180,60," + .8 * flash + ")"); f.addColorStop(1, "rgba(255,80,0,0)");
@@ -191,6 +203,8 @@
       pellets = []; hits = [];
       for (var i = 0; i < 200; i++) pellets.push({ ty: TY + gauss() * sd, tz: gauss() * sd, lag: rnd() * .06, done: false });
       t0 = performance.now(); running = true; requestAnimationFrame(step);
+      // the real shot, on the flash, when the reader chose to listen
+      if (window.LS.listening && window.LS.listening()) { try { var bang = new Audio("media/score/shot.m4a"); bang.volume = .75; bang.play().catch(function () {}); } catch (e) {} }
     };
     dist.addEventListener("input", function () { dout.textContent = dist.value + " m"; if (!running) { hits = []; scene(0); read.textContent = ""; } });
     document.getElementById("fire").addEventListener("click", function () { if (!running) fire(); });

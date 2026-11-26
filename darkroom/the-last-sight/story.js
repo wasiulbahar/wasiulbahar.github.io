@@ -74,7 +74,7 @@
       clip: "aman-face",
       after: ["In the rickshaw he recites the kalema. He gives strangers his phone password. He breathes as little as he can, “to get a little more time.”", "রিকশায় কালেমা পড়েন। অচেনা মানুষকে ফোনের পাসওয়ার্ড বলে দেন। খুব কম শ্বাস নেওয়ার চেষ্টা করেন, “যাতে আরেকটু সময় বেশি পাই।”"],
       afterClip: "aman-duty",
-      now: ["Nine operations. No light. He can no longer see his parents’ faces, or tell from them when something is wrong.", "নয়বার অস্ত্রোপচার। কোনো আলো নেই। বাবা-মায়ের মুখ আর দেখতে পান না, মুখ দেখে বুঝতে পারেন না কিছু হয়েছে কি না।"],
+      now: ["Nine operations. He sees light only when it is brought very close to him. He can no longer see his parents’ faces, or tell from them when something is wrong.", "নয়বার অস্ত্রোপচার। আলো খুব কাছে আনলে তবেই টের পান। বাবা-মায়ের মুখ আর দেখতে পান না, মুখ দেখে বুঝতে পারেন না কিছু হয়েছে কি না।"],
       nowClip: "aman-blind" },
     { id: "sabbir", name: "Sabbir", nameBn: "সাব্বির", photo: "sabbir", street: "street-sabbir", fx: "black",
       intro: ["A job, a wife, a family. He rode a motorcycle and read detective stories.", "চাকরি, স্ত্রী, পরিবার। মোটরসাইকেল চালাতেন, গোয়েন্দা গল্প পড়তেন।"],
@@ -148,23 +148,31 @@
   function quoteCard(who, en, bn, photo) {
     var c = document.createElement("canvas"), W = 1080, H = 1350, x = c.getContext("2d");
     c.width = W; c.height = H;
-    var draw = function (img) {
+    var draw = function (img) {   // one full picture: the photo fills the card, the words sit over its darkened lower part
       x.fillStyle = "#0b0606"; x.fillRect(0, 0, W, H);
+      var text = lang() === "bn" ? bn : en, isBn = lang() === "bn";
+      var size = isBn ? 56 : 62, lh = isBn ? 84 : 76, lines;
+      var wrap = function () {
+        x.font = (isBn ? "600 " + size + "px 'Noto Serif Bengali'" : "400 " + size + "px Newsreader");
+        var words = ("“" + text + "”").split(" "), line = ""; lines = [];
+        words.forEach(function (w) { var t = line ? line + " " + w : w; if (x.measureText(t).width > W - 160) { lines.push(line); line = w; } else line = t; });
+        lines.push(line);
+      };
+      wrap();
+      if (lines.length > 7) { size = Math.round(size * .8); lh = Math.round(lh * .8); wrap(); }
+      var textTop = H - 250 - lines.length * lh;
       if (img) {
-        x.save(); x.filter = "grayscale(1) brightness(.55)";
-        var s = Math.max(W / img.width, 620 / img.height);
-        x.drawImage(img, (W - img.width * s) / 2, 0, img.width * s, img.height * s); x.restore();
-        var g = x.createLinearGradient(0, 300, 0, 640); g.addColorStop(0, "rgba(11,6,6,0)"); g.addColorStop(1, "#0b0606");
-        x.fillStyle = g; x.fillRect(0, 300, W, 340);
+        x.save(); x.filter = "grayscale(1) brightness(.62)";
+        var s = Math.max(W / img.width, H / img.height);
+        x.drawImage(img, (W - img.width * s) / 2, (H - img.height * s) / 2.6, img.width * s, img.height * s); x.restore();
+        var g = x.createLinearGradient(0, Math.max(0, textTop - 360), 0, textTop + 120);
+        g.addColorStop(0, "rgba(11,6,6,0)"); g.addColorStop(1, "rgba(11,6,6,.94)");
+        x.fillStyle = g; x.fillRect(0, 0, W, H);
+        x.fillStyle = "rgba(11,6,6,.94)"; x.fillRect(0, textTop + 120, W, H);
       }
-      x.fillStyle = "#e0262f"; x.fillRect(80, img ? 660 : 200, 90, 10);
-      var text = lang() === "bn" ? bn : en;
-      x.fillStyle = "#f3eee2"; x.font = (lang() === "bn" ? "600 56px 'Noto Serif Bengali'" : "400 62px Newsreader"), x.textBaseline = "top";
-      var words = ("“" + text + "”").split(" "), line = "", y = img ? 720 : 270, lh = lang() === "bn" ? 84 : 76, lines = [];
-      words.forEach(function (w) { var t = line ? line + " " + w : w; if (x.measureText(t).width > W - 160) { lines.push(line); line = w; } else line = t; });
-      lines.push(line);
-      if (lines.length > 6) { x.font = x.font.replace(/\d+px/, function (m) { return Math.round(parseInt(m) * .8) + "px"; }); }
-      lines.forEach(function (l, i) { x.fillText(l, 80, y + i * lh); });
+      x.fillStyle = "#e0262f"; x.fillRect(80, textTop - 50, 90, 10);
+      x.fillStyle = "#f3eee2"; x.textBaseline = "top"; wrap();
+      lines.forEach(function (l, i) { x.fillText(l, 80, textTop + i * lh); });
       x.font = "800 34px 'Bricolage Grotesque'"; x.fillStyle = "#e0262f"; x.fillText(who.toUpperCase(), 80, H - 190);
       x.font = "600 28px 'Bricolage Grotesque'"; x.fillStyle = "#b9b0a3"; x.fillText("The Last Sight · Wasiul Bahar · Darkroom", 80, H - 130);
       var a = document.createElement("a"); a.download = "the-last-sight-" + who.toLowerCase().replace(/\W+/g, "-") + ".png";

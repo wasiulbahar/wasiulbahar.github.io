@@ -13,7 +13,7 @@
     safwan: { tryIt: "Watch the white clear. For days, it did not." },
     jashim: { tryIt: "Cover one eye and keep reading. For him, an hour of this hurts." },
     ripa: { tryIt: "Hold a finger in front of your face and look past it: you see two. She sees everything that way." },
-    aman: { over: "No light.", tryIt: "Close both eyes, and think of the faces you know best." },
+    aman: { over: "Light, only when it comes very close.", tryIt: "Close your eyes and bring a lamp or your phone’s torch near them: a glow, and nothing else. His parents’ faces are past it." },
     sabbir: { over: "No light.", tryIt: "Close both eyes. His youngest child is six months old." }
   };
 
