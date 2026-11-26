@@ -96,7 +96,7 @@
 
   // the sections outside the chapters each set a scene as they reach the middle of the screen
   var map = [["ls-gate", "silent"], ["story", null], ["ls-aim", "calm"], ["ls-six", "calm"], ["ls-body", "data"], ["ls-range", "data"], ["ls-shot-sec", "data"], ["ls-count", "data"],
-             ["ls-buy", "data"], ["ls-where", "map"], ["ls-seenow", "calm"], ["ls-after", "calm"], ["ls-method", "silent"]];
+             ["ls-buy", "data"], ["ls-jx", "data"], ["ls-braille", "data"], ["ls-where", "map"], ["ls-seenow", "calm"], ["ls-after", "calm"], ["ls-method", "silent"]];
   map.forEach(function (m) {
     var node = document.getElementById(m[0]);
     if (!node || !m[1]) return;

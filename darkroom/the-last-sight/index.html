@@ -18,7 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Noto+Serif+Bengali:wght@400;600&family=Hind+Siliguri:wght@500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <link rel="stylesheet" href="story.css?v=cc5e46d3">
-<link rel="stylesheet" href="sections.css?v=c3fdc8ca">
+<link rel="stylesheet" href="sections.css?v=a1743cc2">
 <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }</script>
 </head>
 <body>
@@ -180,6 +180,28 @@
 
 <div class="ch-slot" data-p="jashim"></div>
 
+<!-- Jashim: try to take them out, then read on with one eye -->
+<section class="ls-body ls-jx" id="ls-jx" aria-labelledby="jx-h">
+  <div class="ls-sec-head">
+    <p class="ls-kicker"><span class="en">86 pellets</span><span class="bn-t" lang="bn">৮৬টি ছররা</span></p>
+    <h2 id="jx-h"><span class="en">Try to take them out.</span><span class="bn-t" lang="bn">বের করে দেখুন।</span></h2>
+    <p><span class="en">Each white speck is one of the pellets that hit Jashim, where he says they hit: none below the thigh. Tap a pellet to remove it.</span><span class="bn-t" lang="bn">প্রতিটি সাদা বিন্দু জসিমের শরীরে লাগা একটি ছররা, তিনি যেখানে লেগেছে বলেছেন: ঊরুর নিচে একটিও নয়। একটি ছররায় চাপ দিন, বের করুন।</span></p>
+  </div>
+  <div class="jx">
+    <div class="jx-fig"><svg id="jx-svg" role="img" aria-labelledby="jx-desc"><desc id="jx-desc">A real X-ray of a body with 86 pellets marked on the head, neck, chest and arms. Tapping removes them, up to 12.</desc></svg></div>
+    <div class="jx-text">
+      <p class="jx-count" id="jx-count" aria-live="polite"></p>
+      <p class="jx-say" id="jx-say" aria-live="polite"></p>
+      <div class="oneeye-card">
+        <p><span class="en">He is also blind in one eye. Reading for an hour hurts.</span><span class="bn-t" lang="bn">এক চোখে তিনি দেখেন না। এক ঘণ্টা পড়লেই কষ্ট হয়।</span></p>
+        <button class="ls-btn" type="button" id="oneeye-btn" aria-pressed="false"><span class="en">Read on with one eye</span><span class="bn-t" lang="bn">এক চোখে পড়ুন</span></button>
+        <p class="ls-note"><span class="en">One side of your screen stays dark until you turn it off.</span><span class="bn-t" lang="bn">বন্ধ না করা পর্যন্ত পর্দার এক পাশ অন্ধকার থাকবে।</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <!-- The cartridge -->
 <section class="ls-range" id="ls-range" aria-labelledby="range-h">
   <div class="ls-sec-head">
@@ -248,6 +270,22 @@
 </section>
 
 <div class="ch-slot" data-p="sabbir"></div>
+
+<!-- Sabbir: one word in Braille -->
+<section class="ls-body ls-braille" id="ls-braille" aria-labelledby="br-h">
+  <div class="ls-sec-head">
+    <p class="ls-kicker"><span class="en">Braille</span><span class="bn-t" lang="bn">ব্রেইল</span></p>
+    <h2 id="br-h"><span class="en">He is learning to read with his fingers.</span><span class="bn-t" lang="bn">তিনি আঙুল দিয়ে পড়তে শিখছেন।</span></h2>
+    <p><span class="en">Four letters, one word. Tap a cell to choose it, then find its pattern in the key below.</span><span class="bn-t" lang="bn">চারটি অক্ষর, একটি শব্দ। একটি ঘর বেছে নিন, তারপর নিচের তালিকায় তার নকশা খুঁজুন।</span></p>
+  </div>
+  <div class="br">
+    <div class="br-word" id="br-word" role="group" aria-label="Four Braille cells"></div>
+    <p class="br-say" id="br-say" aria-live="polite"></p>
+    <div class="br-key" id="br-key" role="group" aria-label="Braille key, a to z"></div>
+    <button class="ls-link" type="button" id="br-show"><span class="en">Show me the word</span><span class="bn-t" lang="bn">শব্দটি দেখান</span></button>
+  </div>
+</section>
+
 
 <!-- 7. The map: a flyover -->
 <section class="ls-where" id="ls-where" aria-labelledby="where-h">
@@ -361,11 +399,14 @@
 </footer>
 
 <audio id="ls-audio" preload="none"></audio>
+<div class="oneeye-veil" aria-hidden="true"></div>
+<button class="oneeye-pill" type="button" id="oneeye-pill" hidden><span class="en">One eye · turn off</span><span class="bn-t" lang="bn">এক চোখ · বন্ধ করুন</span></button>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="story.js?v=bc5160cf"></script>
-<script src="music.js?v=a32f1e19"></script>
+<script src="music.js?v=d8b5b3e8"></script>
 <script src="sections.js?v=c87d655b"></script>
 <script src="seenow.js?v=18070c5e"></script>
+<script src="interact.js?v=718c54c7"></script>
 <script type="module" src="cartridge.js?v=1f01ae0f"></script>
 </body>
 </html>
